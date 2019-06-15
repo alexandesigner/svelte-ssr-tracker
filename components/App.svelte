@@ -26,15 +26,18 @@
   import Messages from '/lib/Messages.js';
   import Persons from '/lib/Persons.js';
 
-  let person;
-  let message;
+  export let person;
+  export let message;
 
   onMount(() => {
-    Meteor.subscribe('messages')
-    Meteor.subscribe('persons')
+    const messagesSub = Meteor.subscribe('messages');
+    const personsSub = Meteor.subscribe('persons');
+
     const computation = Tracker.autorun(() => {
-      person = Persons.findOne();
-      message = Messages.findOne();
+      if (messagesSub.ready() && personsSub.ready()) {
+        person = Persons.findOne();
+        message = Messages.findOne();
+      }
     });
 	});
 
