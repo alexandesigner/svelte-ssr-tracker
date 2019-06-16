@@ -6,10 +6,18 @@ import Persons from '/lib/Persons.js';
 import Messages from '/lib/Messages.js';
 
 onPageLoad((sink) => {
-  const { html, css } = App.render();
+  const person = Persons.findOne();
+  const message = Messages.findOne();
+
+  const initialState = { person, message };
+  const { html, css } = App.render(initialState);
 
   sink.appendToHead(`<style>${css.code}</style>`);
   sink.renderIntoElementById('main', html);
+
+  sink.appendToBody(
+    `<script>INITIAL_STATE = ${JSON.stringify(initialState)};</script>`
+  );
 });
 
 Meteor.startup(() => {
